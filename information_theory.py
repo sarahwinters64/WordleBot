@@ -27,8 +27,11 @@ def compute_highest_entropy(all_guess_results, allowed_guesses, probability_map)
         entropy[i] = np.sum([-1 * prob * np.log2(prob) for prob in frequency])
 
     # find the argmax to get the correct guess with highest entropy
-    index = np.argmax(entropy)
-    return allowed_guesses[index]
+    if len(entropy) > 0:
+        index = np.argmax(entropy)
+        return allowed_guesses[index]
+    else:
+        return ""
 
 
 # Problem 3
@@ -98,7 +101,7 @@ def wordle_companion():
     for word in allowed_guesses:
         frequencies[word] = probability_map[word]
     guess = compute_highest_entropy(all_guess_results, allowed_guesses, frequencies)
-
+    no_possible_guess = False
     # script
     print("Ready for another day of Wordle? Your first guess should be", guess)
     game_over = False
@@ -127,9 +130,15 @@ def wordle_companion():
         guess = compute_highest_entropy(
             all_guess_results, allowed_guesses, probability_map
         )
-        print("Your next guess should be", guess)
-
-    if num_guesses > 6:
+        if guess != "":
+            print("Your next guess should be", guess)
+        else:
+            no_possible_guess = True
+            break
+    
+    if no_possible_guess:
+        print("Sorry, looks like the answer is not in our list of words.")
+    elif num_guesses > 6:
         print("Better luck next time, champ")
     else:
         print(f"Great job! You solved wordle in {num_guesses} guesses!")

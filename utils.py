@@ -13,6 +13,17 @@ def load_words(filen: str):
         words = [line.strip() for line in file.readlines() if len(line.strip()) == 5]
     return words
 
+def csv_to_txt(filen: str):
+    """
+    Loads all of the words from the given file, ensuring that they
+    are formatted correctly.
+    """
+    with open(filen, "r") as file:
+        # Get all 5-letter words
+        words = [line.split(',')[0]+'\n' for line in file.readlines() if len(line.split(',')[0]) == 5]
+        save_text_file(words, filen)
+    return words
+
 
 def load_json(filen: str):
     """
